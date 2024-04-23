@@ -21,7 +21,7 @@ impl GeometryDrawer {
         end_x: usize,
         end_y: usize,
         color: usize,
-    ) -> Result<bool, DrawError>{
+    ) -> Result<(), DrawError>{
         for i in start_x..end_x {
             for j in start_y..end_y {
                 if buf.len() < (j * self.window_width + i) {
@@ -31,7 +31,7 @@ impl GeometryDrawer {
                 }
             }
         }
-        Ok(true)
+        Ok(())
     }
 
     pub fn screen_clear(
@@ -41,7 +41,7 @@ impl GeometryDrawer {
         start_y: usize,
         end_x: usize,
         end_y: usize,
-    ) -> Result<bool, DrawError>{
+    ) -> Result<(), DrawError>{
         self.draw_box( buf, start_x, start_y, end_x, end_y, 0x00_00_00)
     }
 
@@ -53,7 +53,7 @@ impl GeometryDrawer {
         end_x: usize,
         end_y: usize,
         color: usize,
-    ) -> Result<bool, DrawError>{
+    ) -> Result<(), DrawError>{
         for (x, y) in Bresenham::new(
             (start_x as isize, start_y as isize),
             (end_x as isize, end_y as isize),
@@ -65,8 +65,29 @@ impl GeometryDrawer {
                 return Err(DrawError::OutOfBounds(format!("x: {x} y: {y}").to_string()));
             }
         }
-        Ok(true)
+        Ok(())
     }
+
+    pub fn draw_rectangle(
+        &self,
+        buf: &mut Vec<u32>,
+        start_x: usize,
+        start_y: usize,
+        end_x: usize,
+        end_y: usize,
+        border_thickness: usize,
+        color: usize,
+    ) -> Result<(), DrawError>{
+        for i in 0..border_thickness{
+            self.draw_line(buf, start_x + i, start_y, start_x + i, end_y, color)?; 
+            self.draw_line(buf, end_x - i -1, start_y, end_x - i -1, end_y, color)?;                  
+            self.draw_line(buf, start_x, start_y + i, end_x, start_y + i, color)?;  
+            self.draw_line(buf, start_x, end_y - i - 1, end_x, end_y - i - 1, color)?;
+        }
+        Ok(())
+    }
+
+    
 }
 
 
