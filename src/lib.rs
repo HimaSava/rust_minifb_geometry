@@ -8,7 +8,7 @@ pub struct GeometryDrawer {
 }
 
 impl GeometryDrawer {
-    pub fn new(window_width: usize,window_height: usize) -> Self{
+    pub fn new(window_width: usize) -> Self{
         Self { window_width }
     }
 
