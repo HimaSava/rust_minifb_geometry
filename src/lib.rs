@@ -4,12 +4,12 @@ mod error;
 
 pub struct GeometryDrawer {
     window_width: usize,
-    window_height: usize,
+    // window_height: usize, // Meant for future use
 }
 
 impl GeometryDrawer {
     pub fn new(window_width: usize,window_height: usize) -> Self{
-        Self { window_width, window_height }
+        Self { window_width }
     }
 
     pub fn draw_box(
