@@ -1,4 +1,5 @@
 
+
 use bresenham::Bresenham;
 use error::DrawError;
 mod error;
@@ -24,11 +25,7 @@ impl GeometryDrawer {
     ) -> Result<(), DrawError>{
         for i in start_x..end_x {
             for j in start_y..end_y {
-                if buf.len() < (j * self.window_width + i) {
-                    return Err(DrawError::OutOfBounds(format!("x: {i} y: {j}").to_string()));
-                } else {
-                    buf[j * self.window_width + i] = color as u32;
-                }
+                self.draw_pixel(buf, i, j, color)?;
             }
         }
         Ok(())
@@ -58,12 +55,7 @@ impl GeometryDrawer {
             (start_x as isize, start_y as isize),
             (end_x as isize, end_y as isize),
         ) {
-            if (y as usize * self.window_width + x as usize) < buf.len(){
-                buf[y as usize * self.window_width + x as usize] = color as u32;
-            }
-            else {
-                return Err(DrawError::OutOfBounds(format!("x: {x} y: {y}").to_string()));
-            }
+            self.draw_pixel(buf, x as usize, y as usize, color)?;
         }
         Ok(())
     }
@@ -83,6 +75,53 @@ impl GeometryDrawer {
             self.draw_line(buf, end_x - i -1, start_y, end_x - i -1, end_y, color)?;                  
             self.draw_line(buf, start_x, start_y + i, end_x, start_y + i, color)?;  
             self.draw_line(buf, start_x, end_y - i - 1, end_x, end_y - i - 1, color)?;
+        }
+        Ok(())
+    }
+    pub fn draw_circle(
+        &self,
+        buf: &mut Vec<u32>,
+        start_x: usize,
+        start_y: usize,
+        radius: usize,
+        color: usize,
+    ) -> Result<(), DrawError>{
+        let mut d: isize = 3 - 2 * radius as isize;
+        let mut x  = 0;
+        let mut y = radius;
+        while y >= x {
+            x += 1;
+            if d>0 {
+                y -= 1;
+                d = d + 4 * (x as isize - y as isize)  + 10;
+            }
+            else {
+                d = d + 4 * x as isize + 6;
+            }
+            self.draw_pixel(buf, start_x + x, start_y + y, color)?;
+            self.draw_pixel(buf, start_x - x, start_y + y, color)?;
+            self.draw_pixel(buf, start_x + x, start_y - y, color)?;
+            self.draw_pixel(buf, start_x - x, start_y - y, color)?;
+            self.draw_pixel(buf, start_x + y, start_y + x, color)?;
+            self.draw_pixel(buf, start_x - y, start_y + x, color)?;
+            self.draw_pixel(buf, start_x + y, start_y - x, color)?;
+            self.draw_pixel(buf, start_x - y, start_y - x, color)?;
+        }
+        Ok(())
+    }
+
+    fn draw_pixel(
+        &self,
+        buf: &mut Vec<u32>,
+        x: usize,
+        y: usize,
+        color: usize
+    ) -> Result<(), DrawError>{
+        if (y * self.window_width + x ) < buf.len(){
+            buf[y  * self.window_width + x ] = color as u32;
+        }
+        else {
+            return Err(DrawError::OutOfBounds(format!("x: {x} y: {y}").to_string()));
         }
         Ok(())
     }
