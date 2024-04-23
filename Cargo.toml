@@ -2,6 +2,11 @@
 name = "minifb_geometry"
 version = "0.1.0"
 edition = "2021"
+license = "MIT OR Apache-2.0"
+description = "A crate meant to help draw shapes in the minifb window"
+repository = "https://github.com/HimaSava/rust_minifb_geometry.git"
+readme = "README.md"
+keywords = ["minifb","minifb_geometry","geometry","pixel_shapes"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

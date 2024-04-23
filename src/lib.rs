@@ -1,5 +1,3 @@
-
-
 use bresenham::Bresenham;
 use error::DrawError;
 mod error;
