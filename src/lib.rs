@@ -2,16 +2,40 @@ use bresenham::Bresenham;
 use error::DrawError;
 mod error;
 
+
+/// A struct representing a geometry drawer.
 pub struct GeometryDrawer {
     window_width: usize,
-    // window_height: usize, // Meant for future use
 }
 
 impl GeometryDrawer {
-    pub fn new(window_width: usize) -> Self{
+    /// Creates a new `GeometryDrawer` instance.
+    ///
+    /// # Arguments
+    ///
+    /// * `window_width` - The width of the window.
+    ///
+    /// # Returns
+    ///
+    /// A new `GeometryDrawer` instance.
+    pub fn new(window_width: usize) -> Self {
         Self { window_width }
     }
 
+    /// Draws a box on the buffer.
+    ///
+    /// # Arguments
+    ///
+    /// * `buf` - The buffer to draw on.
+    /// * `start_x` - The starting x-coordinate of the box.
+    /// * `start_y` - The starting y-coordinate of the box.
+    /// * `end_x` - The ending x-coordinate of the box.
+    /// * `end_y` - The ending y-coordinate of the box.
+    /// * `color` - The color of the box.
+    ///
+    /// # Returns
+    ///
+    /// Returns `Ok(())` if the box is successfully drawn, or a `DrawError` if an error occurs.
     pub fn draw_box(
         &self,
         buf: &mut Vec<u32>,
@@ -20,7 +44,7 @@ impl GeometryDrawer {
         end_x: usize,
         end_y: usize,
         color: usize,
-    ) -> Result<(), DrawError>{
+    ) -> Result<(), DrawError> {
         for i in start_x..end_x {
             for j in start_y..end_y {
                 self.draw_pixel(buf, i, j, color)?;
@@ -29,6 +53,19 @@ impl GeometryDrawer {
         Ok(())
     }
 
+    /// Clears the screen.
+    /// 
+    /// # Arguments
+    /// 
+    /// * `buf` - The buffer to clear.
+    /// * `start_x` - The starting x-coordinate of the screen.
+    /// * `start_y` - The starting y-coordinate of the screen.
+    /// * `end_x` - The ending x-coordinate of the screen.
+    /// * `end_y` - The ending y-coordinate of the screen.
+    /// 
+    /// # Returns
+    /// 
+    /// Returns `Ok(())` if the screen is successfully cleared, or a `DrawError` if an error occurs.
     pub fn screen_clear(
         &self,
         buf: &mut Vec<u32>,
@@ -40,6 +77,20 @@ impl GeometryDrawer {
         self.draw_box( buf, start_x, start_y, end_x, end_y, 0x00_00_00)
     }
 
+    /// Draws a line on the buffer. 
+    ///  
+    /// # Arguments
+    /// 
+    /// * `buf` - The buffer to draw on.
+    /// * `start_x` - The starting x-coordinate of the line.
+    /// * `start_y` - The starting y-coordinate of the line.
+    /// * `end_x` - The ending x-coordinate of the line.
+    /// * `end_y` - The ending y-coordinate of the line.
+    /// * `color` - The color of the line.
+    /// 
+    /// # Returns
+    /// 
+    /// Returns `Ok(())` if the line is successfully drawn, or a `DrawError` if an error occurs.
     pub fn draw_line(
         &self,
         buf: &mut Vec<u32>,
@@ -58,6 +109,21 @@ impl GeometryDrawer {
         Ok(())
     }
 
+    /// Draws a rectangle on the buffer.
+    /// 
+    /// # Arguments
+    /// 
+    /// * `buf` - The buffer to draw on.
+    /// * `start_x` - The starting x-coordinate of the rectangle.
+    /// * `start_y` - The starting y-coordinate of the rectangle.
+    /// * `end_x` - The ending x-coordinate of the rectangle.
+    /// * `end_y` - The ending y-coordinate of the rectangle.           
+    /// * `border_thickness` - The thickness of the border of the rectangle.
+    /// * `color` - The color of the rectangle.
+    /// 
+    /// # Returns
+    /// 
+    /// Returns `Ok(())` if the rectangle is successfully drawn, or a `DrawError` if an error occurs.
     pub fn draw_rectangle(
         &self,
         buf: &mut Vec<u32>,
@@ -76,6 +142,20 @@ impl GeometryDrawer {
         }
         Ok(())
     }
+
+    /// Draws a circle on the buffer.
+    /// 
+    /// # Arguments
+    /// 
+    /// * `buf` - The buffer to draw on.
+    /// * `start_x` - The starting x-coordinate of the circle.
+    /// * `start_y` - The starting y-coordinate of the circle.
+    /// * `radius` - The radius of the circle.
+    /// * `color` - The color of the circle.
+    /// 
+    /// # Returns
+    /// 
+    /// Returns `Ok(())` if the circle is successfully drawn, or a `DrawError` if an error occurs.
     pub fn draw_circle(
         &self,
         buf: &mut Vec<u32>,
@@ -108,6 +188,18 @@ impl GeometryDrawer {
         Ok(())
     }
 
+    /// Draws a pixel on the buffer.
+    /// 
+    /// # Arguments
+    /// 
+    /// * `buf` - The buffer to draw on.
+    /// * `x` - The x-coordinate of the pixel.
+    /// * `y` - The y-coordinate of the pixel.
+    /// * `color` - The color of the pixel.
+    /// 
+    /// # Returns
+    /// 
+    /// Returns `Ok(())` if the pixel is successfully drawn, or a `DrawError` if an error occurs.
     fn draw_pixel(
         &self,
         buf: &mut Vec<u32>,
